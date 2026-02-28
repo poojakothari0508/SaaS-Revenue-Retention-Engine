@@ -1,0 +1,34 @@
+# --- Python Basics ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environment ---
+venv/
+env/
+.env
+
+# --- Configuration & Secrets ---
+config/database.ini
+secrets.json
+
+# --- Data Files ---
+/data/
+data/raw/*.csv
+data/processed/*.csv
+data/temp/
+*.sqlite
+*.db
+
+
+
+
+.ipynb_checkpoints/
+
+.vscode/
+.idea/
+
+.DS_Store
+Thumbs.db
+
+*.pbix.temp
