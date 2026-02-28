@@ -1,5 +1,8 @@
--- Churn Logic Definition
--- This query calculates monthly churn rates, distinguishing between Voluntary and Involuntary churn.
+-- File: sql/marts/core_churn_metrics.sql
+-- Description: Core business logic for Voluntary vs Involuntary Churn
+-- Materialization: View
+
+CREATE OR REPLACE VIEW core_churn_metrics AS
 
 WITH monthly_subscriptions AS (
     -- 1. Create a "Scaffold" of months for each subscription to track status over time
@@ -42,7 +45,7 @@ SELECT
     
     -- Churn Rate Formulas
     ROUND(
-        (SUM(CASE WHEN churn_type IN ('Voluntary', 'Involuntary') THEN 1 ELSE 0 END)::DECIMAL / COUNT(DISTINCT customer_id)) * 100, 
+        (SUM(CASE WHEN churn_type IN ('Voluntary', 'Involuntary') THEN 1 ELSE 0 END)::DECIMAL / NULLIF(COUNT(DISTINCT customer_id), 0)) * 100, 
     2) AS churn_rate_pct,
     
     -- Revenue Impact (Revenue Churn)
@@ -50,5 +53,4 @@ SELECT
     
 FROM churn_status
 WHERE month_date < DATE_TRUNC('month', CURRENT_DATE) -- Exclude current incomplete month
-GROUP BY month_date
-ORDER BY month_date;
+GROUP BY month_date;
